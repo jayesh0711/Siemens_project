@@ -1,0 +1,59 @@
+#include <cmath>
+#include <cstdint>
+
+struct Float16 {
+    bool sign;
+    int16_t exponent;
+    uint16_t fraction;
+
+    Float16(float x) {
+        sign = x < 0;
+        if (sign) x = -x;
+        exponent = 0;
+        while (x >= 2) {
+            x /= 2;
+            exponent++;
+        }
+        while (x < 1) {
+            x *= 2;
+            exponent--;
+        }
+        fraction = round((x - 1) * (1 << 10));
+    }
+
+    Float16() : sign(false), exponent(0), fraction(0) {}
+
+    float to_float() const {
+        float mantissa = (static_cast<float>(fraction) / static_cast<float>(1 << 10)) + 1;
+        float result = mantissa * pow(2, exponent);
+        return sign ? -result : result;
+    }
+
+    Float16 operator+(const Float16& other) const {
+        float result = to_float() + other.to_float();
+        return Float16(result);
+    }
+
+    Float16 operator-(const Float16& other) const {
+        float result = to_float() - other.to_float();
+        return Float16(result);
+    }
+
+    Float16 operator*(const Float16& other) const {
+        float result = to_float() * other.to_float();
+        return Float16(result);
+    }
+
+    Float16 operator/(const Float16& other) const {
+        float result = to_float() / other.to_float();
+        return Float16(result);
+    }
+};
+
+Float16 to_float16(float x) {
+    return Float16(x);
+}
+
+float to_float(const Float16& x) {
+    return x.to_float();
+}
