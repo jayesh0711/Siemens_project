@@ -1,1 +1,1 @@
-# Siemens_project
+To implement the 16-bit floating-point arithmetic library, I can define a Float16 struct with three members: a boolean sign to represent the sign bit, an int16_t exponent to represent the exponent bits, and a uint16_t fraction to represent the fraction bits. I  can then define functions to convert between float and Float16, and to perform arithmetic operations on Float16.
